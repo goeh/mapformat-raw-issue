@@ -1,11 +1,13 @@
-## Micronaut Issue
+## Micronaut Issue #5778
+
+https://github.com/micronaut-projects/micronaut-core/issues/5778
 
 - Micronaut Version 2.5.9
 ---
 
 ### Problem
 
-The following configuration is not parsed correctly.
+I have the following configuration file:
 
 ```
 storage:
@@ -18,6 +20,8 @@ storage:
         test-bucket-2: "Some hyphenated bucket"
         test-bucket-3: "Another hyphenated bucket"
 ```
+A configuration class `AppConfig` is annotated with `@ConfigurationProperties` and it contains nested configuration
+using static inner classes. However, the keys in the *buckets* map are not preserved.
 
 The `buckets` property is annotated with `@MapFormat` AND `RAW`, but the keys are converted to camelCase.
 I want the keys to be preserved as they are in the property file.
