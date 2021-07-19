@@ -1,12 +1,37 @@
-## Micronaut 2.5.9 Documentation
+## Micronaut Issue
 
-- [User Guide](https://docs.micronaut.io/2.5.9/guide/index.html)
-- [API Reference](https://docs.micronaut.io/2.5.9/api/index.html)
-- [Configuration Reference](https://docs.micronaut.io/2.5.9/guide/configurationreference.html)
-- [Micronaut Guides](https://guides.micronaut.io/index.html)
+- Micronaut Version 2.5.9
 ---
 
-## Feature http-client documentation
+### Problem
 
-- [Micronaut HTTP Client documentation](https://docs.micronaut.io/latest/guide/index.html#httpClient)
+The following configuration is not parsed correctly.
 
+```
+storage:
+  providers:
+    test:
+      name: S3
+      buckets:
+        default: "The default bucket"
+        testBucket1: "Bucket without hyphens"
+        test-bucket-2: "Some hyphenated bucket"
+        test-bucket-3: "Another hyphenated bucket"
+```
+
+The `buckets` property is annotated with `@MapFormat` AND `RAW`, but the keys are converted to camelCase.
+I want the keys to be preserved as they are in the property file.
+
+```
+@MapFormat(transformation = MapFormat.MapTransformation.FLAT, keyFormat = StringConvention.RAW)
+private Map<String, String> buckets = new HashMap<>();
+```
+### Debugging
+
+When `ProviderConfig#setBuckets(Map<String, String> buckets)` is called, the `buckets` parameter is already a `Map` with incorrect (camelCase) keys.
+
+### Test
+
+```
+./gradlew test
+```
