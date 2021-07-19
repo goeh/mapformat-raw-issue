@@ -1,0 +1,14 @@
+---
+micronaut:
+  application:
+    name: mapFormatRawIssue
+
+storage:
+  providers:
+    test:
+      name: S3
+      buckets:
+        default: "The default bucket"
+        testBucket1: "Bucket without hyphens"
+        test-bucket-2: "Some hyphenated bucket"
+        test-bucket-3: "Another hyphenated bucket"
